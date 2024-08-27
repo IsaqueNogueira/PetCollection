@@ -4,6 +4,7 @@
     package="com.isaquesoft.petcollection">
 
     <application
+        android:name="com.isaquesoft.geradorderecibos.application.AppAplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

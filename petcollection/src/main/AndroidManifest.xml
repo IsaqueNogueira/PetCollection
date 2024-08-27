@@ -11,6 +11,13 @@
         android:theme="@style/Theme.PetCollection"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6470587668575312~7767599053" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <activity
             android:name="com.isaquesoft.petcollection.presentation.activity.HomePetCollectionActivity"
             android:exported="true"

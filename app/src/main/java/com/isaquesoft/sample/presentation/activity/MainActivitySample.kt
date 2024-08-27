@@ -1,20 +1,25 @@
 package com.isaquesoft.sample.presentation.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.isaquesoft.petcollection.presentation.activity.HomePetCollectionActivity
+import com.isaquesoft.petcollection.domain.PetCollectionStarter
+import com.isaquesoft.petcollection.domain.entity.PetCollectionParamsEntity
+import org.koin.android.ext.android.inject
 
 /**
  * Created by Isaque Nogueira on 23/08/2024
  */
 class MainActivitySample : AppCompatActivity() {
+    private val petCollectionStarter: PetCollectionStarter by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Intent(this, HomePetCollectionActivity::class.java).apply {
-            startActivity(this)
-            finish()
-        }
+        val petCollectionParams =
+            PetCollectionParamsEntity(
+                adBannerId = "ca-app-pub-6470587668575312/1303668027",
+                adBannerIdMediumRectangle = "ca-app-pub-6470587668575312/1303668027",
+            )
+        petCollectionStarter.startPetCollection(petCollectionParams)
+        finish()
     }
 }

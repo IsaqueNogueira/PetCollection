@@ -1,0 +1,19 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <!-- Sombra -->
+  <item>
+    <shape android:shape="oval">
+      <solid android:color="#F8A9AA" />
+      <size android:width="300dp" android:height="16dp"/>
+    </shape>
+  </item>
+
+  <!-- Círculo Alongado Principal -->
+  <item android:top="4dp">
+    <shape android:shape="oval">
+      <solid android:color="#F8A9AA" />
+      <size android:width="300dp" android:height="16dp"/>
+    </shape>
+  </item>
+
+</layer-list>
