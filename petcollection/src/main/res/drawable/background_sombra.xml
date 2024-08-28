@@ -4,7 +4,7 @@
   <item>
     <shape android:shape="oval">
       <solid android:color="#F8A9AA" />
-      <size android:width="300dp" android:height="16dp"/>
+      <size android:width="300dp" android:height="10dp"/>
     </shape>
   </item>
 
@@ -12,7 +12,7 @@
   <item android:top="4dp">
     <shape android:shape="oval">
       <solid android:color="#F8A9AA" />
-      <size android:width="300dp" android:height="16dp"/>
+      <size android:width="300dp" android:height="10dp"/>
     </shape>
   </item>
 

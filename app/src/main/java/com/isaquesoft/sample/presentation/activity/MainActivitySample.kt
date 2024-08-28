@@ -2,6 +2,7 @@ package com.isaquesoft.sample.presentation.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 import com.isaquesoft.petcollection.domain.PetCollectionStarter
 import com.isaquesoft.petcollection.domain.entity.PetCollectionParamsEntity
 import org.koin.android.ext.android.inject
@@ -14,6 +15,7 @@ class MainActivitySample : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this) {}
         val petCollectionParams =
             PetCollectionParamsEntity(
                 adBannerId = "ca-app-pub-6470587668575312/1303668027",

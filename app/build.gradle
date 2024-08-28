@@ -63,6 +63,8 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:6.0.1"
 
+    implementation 'com.google.android.gms:play-services-ads:23.2.0'
+
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation "androidx.navigation:navigation-fragment-ktx:2.7.7"

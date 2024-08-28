@@ -21,7 +21,7 @@ class HomePetCollectionActivity : AppCompatActivity() {
 
     private var petCollectionParams: PetCollectionParams? = null
 
-    private var adView: AdView? = null
+    private lateinit var adView: AdView
     private var initialLayoutComplete = false
 
     private val adSize: AdSize
@@ -45,9 +45,13 @@ class HomePetCollectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = HomePetcollectionActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        adView = AdView(this)
+        setupGetParams()
+    }
+
+    private fun setupGetParams() {
         petCollectionParams = intent.getParcelableExtra(PET_COLLECTION_PARAMS)
         petCollectionParams?.let {
-            adView = AdView(this)
             binding.adViewBanner.addView(adView)
             binding.adViewBanner.viewTreeObserver.addOnGlobalLayoutListener {
                 if (!initialLayoutComplete) {
@@ -55,20 +59,40 @@ class HomePetCollectionActivity : AppCompatActivity() {
                     loadAdBanner(it)
                 }
             }
-            val navController = Navigation.findNavController(this, R.id.navHostMainActivity)
-            val bundle =
-                Bundle().apply {
-                    putParcelable("petCollectionParams", it)
-                }
 
-            navController.setGraph(R.navigation.nav_graph, bundle)
+            setupNavigation(it)
         }
     }
 
+    private fun setupNavigation(it: PetCollectionParams) {
+        val navController = Navigation.findNavController(this, R.id.navHostMainActivity)
+        val bundle =
+            Bundle().apply {
+                putParcelable("petCollectionParams", it)
+            }
+
+        navController.setGraph(R.navigation.nav_graph, bundle)
+    }
+
     private fun loadAdBanner(petCollectionParams: PetCollectionParams) {
-        adView?.adUnitId = petCollectionParams.adBannerId
-        adView?.setAdSize(adSize)
+        adView.adUnitId = petCollectionParams.adBannerId
+        adView.setAdSize(adSize)
         val adRequest = AdRequest.Builder().build()
-        adView?.loadAd(adRequest)
+        adView.loadAd(adRequest)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adView.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        adView.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adView.destroy()
     }
 }

@@ -13,5 +13,17 @@
         <argument
             android:name="petCollectionParams"
             app:argType="com.isaquesoft.petcollection.presentation.model.PetCollectionParams" />
+        <action
+            android:id="@+id/action_homeFragment_to_collectionFragment"
+            app:destination="@id/collectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/collectionFragment"
+        android:name="com.isaquesoft.petcollection.presentation.fragment.CollectionFragment"
+        android:label="CollectionFragment"
+        tools:layout="@layout/collection_fragment">
+        <action
+            android:id="@+id/action_collectionFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
