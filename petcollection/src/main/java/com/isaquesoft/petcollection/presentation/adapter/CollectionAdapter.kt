@@ -15,13 +15,13 @@ class CollectionAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(collection: Collection) {
             with(binding) {
-//                if (collection.isCollected) {
-                animationViewItemCollection.setRawFromString(collection.rawName)
-                animationViewItemCollection.repeatCount = 20
-//                } else {
-//                    animationViewItemCollection.setRawFromString("paw")
-//                    animationViewItemCollection.repeatCount = 0
-//                }
+                if (collection.isCollected) {
+                    animationViewItemCollection.setRawFromString(collection.rawName)
+                    animationViewItemCollection.repeatCount = 20
+                } else {
+                    animationViewItemCollection.setRawFromString("paw")
+                    animationViewItemCollection.repeatCount = 0
+                }
             }
         }
     }
