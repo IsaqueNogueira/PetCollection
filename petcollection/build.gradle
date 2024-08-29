@@ -77,7 +77,20 @@ afterEvaluate {
                 from components.release
                 groupId "com.github.IsaqueNogueira"
                 artifactId "petcollection"
-                version "1.0.0"
+                version "1.0.0-SNAPSHOT"
+                artifact("$buildDir/outputs/aar/petcollection-release.aar")
+            }
+        }
+    }
+}
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            bar(MavenPublication) {
+                groupId "com.github.IsaqueNogueira"
+                artifactId "petcollection"
+                version "1.0.0-SNAPSHOT"
                 artifact("$buildDir/outputs/aar/petcollection-release.aar")
             }
         }
