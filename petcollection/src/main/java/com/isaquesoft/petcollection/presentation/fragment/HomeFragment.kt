@@ -11,16 +11,24 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import com.isaquesoft.geradorderecibos.presentation.util.safelyNavigate
 import com.isaquesoft.petcollection.R
 import com.isaquesoft.petcollection.data.model.Collection
 import com.isaquesoft.petcollection.databinding.HomeFragmentBinding
 import com.isaquesoft.petcollection.presentation.state.HomeState
 import com.isaquesoft.petcollection.presentation.util.setRawFromString
+import com.isaquesoft.petcollection.presentation.view.Presets
 import com.isaquesoft.petcollection.presentation.viewmodel.HomeFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,10 +43,10 @@ class HomeFragment : Fragment() {
     private val petCollectionParams by lazy { args.petCollectionParams }
 
     private val viewModel: HomeFragmentViewModel by viewModel()
-    private var listCollection = emptyList<Collection>()
+    private var listCollection = mutableListOf<Collection>()
 
     private companion object {
-        var firsAccess = true
+        private var firsAccess = true
     }
 
     private lateinit var adView: AdView
@@ -61,6 +69,8 @@ class HomeFragment : Fragment() {
             return AdSize(adWidth, adHeight)
         }
 
+    private var rewardedInterstitialAd: RewardedInterstitialAd? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,7 +88,91 @@ class HomeFragment : Fragment() {
         viewModel.getListCollection()
         setupObserver()
         setupAdMediumRectangle()
+        setupAdPremiado()
         setupListener()
+    }
+
+    private fun setupAdPremiado() {
+        val backgroundScope = CoroutineScope(Dispatchers.IO)
+        backgroundScope.launch {
+            activity?.runOnUiThread {
+                loadRewardedInterstitial()
+            }
+        }
+    }
+
+    private fun loadRewardedInterstitial() {
+        context?.let {
+            RewardedInterstitialAd.load(
+                it,
+                petCollectionParams.adRewardedInterstitialId,
+                AdRequest.Builder().build(),
+                object : RewardedInterstitialAdLoadCallback() {
+                    override fun onAdLoaded(ad: RewardedInterstitialAd) {
+                        rewardedInterstitialAd = ad
+                    }
+
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        rewardedInterstitialAd = null
+                    }
+                },
+            )
+        }
+    }
+
+    private fun showRewardedInterstitial(shouldFinish: Boolean = false) {
+        rewardedInterstitialAd?.show(requireActivity()) {
+            loadRewardedInterstitial()
+        }
+
+        callBackRewardInterstitialAd(shouldFinish)
+    }
+
+    private fun callBackRewardInterstitialAd(shouldFinish: Boolean = false) {
+        if (shouldFinish && rewardedInterstitialAd == null) {
+            activity?.finish()
+            return
+        } else if (rewardedInterstitialAd == null) {
+            showKonfetti()
+        }
+
+        rewardedInterstitialAd?.fullScreenContentCallback =
+            object : FullScreenContentCallback() {
+                override fun onAdClicked() {
+                    // Called when a click is recorded for an ad.
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    // Called when ad is dismissed.
+                    // Set the ad reference to null so you don't show the ad a second time.
+
+                    rewardedInterstitialAd = null
+                    if (shouldFinish) {
+                        activity?.finish()
+                    } else {
+                        showKonfetti()
+                    }
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    // Called when ad fails to show.
+
+                    rewardedInterstitialAd = null
+                    if (shouldFinish) {
+                        activity?.finish()
+                    } else {
+                        showKonfetti()
+                    }
+                }
+
+                override fun onAdImpression() {
+                    // Called when an impression is recorded for an ad.
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    // Called when ad is shown.
+                }
+            }
     }
 
     private fun setupObserver() {
@@ -90,7 +184,8 @@ class HomeFragment : Fragment() {
                             if (it.listCollection.isEmpty()) {
                                 viewModel.insertFirstListCollection()
                             } else {
-                                listCollection = it.listCollection
+                                listCollection = it.listCollection.toMutableList()
+                                setupTextInformationHome()
                                 setupCollection()
                                 viewModel.idle()
                             }
@@ -100,6 +195,16 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setupTextInformationHome() {
+        if (listCollection.none { !it.isCollected }) {
+            binding.textInformationHome.text =
+                getString(R.string.nosso_aplicativo_gratuito_gra_as_a_voc_nsua_colecao_esta_completa)
+        } else {
+            binding.textInformationHome.text =
+                getString(R.string.nosso_aplicativo_gratuito_gra_as_a_voc_ncolete_os_bichinhos_e_monte_a_sua_cole_o)
         }
     }
 
@@ -114,6 +219,7 @@ class HomeFragment : Fragment() {
 
         if (firsAccess) {
             firsAccess = false
+            showKonfetti()
             setupRandomCollection()
         } else {
             binding.textContadorHome.text =
@@ -122,8 +228,7 @@ class HomeFragment : Fragment() {
                 listCollection
                     .filter {
                         it.isCollected
-                    }.sortedByDescending { it.dateUpdated }
-                    .first()
+                    }.maxByOrNull { it.dateUpdated }!!
                     .rawName,
             )
         }
@@ -131,25 +236,35 @@ class HomeFragment : Fragment() {
 
     private fun setupRandomCollection() {
         val listNotCollected = listCollection.filter { !it.isCollected }
-        binding.textContadorHome.text =
-            "${listCollection.filter { it.isCollected }.size + 1}/${listCollection.size}"
+
+        if (listNotCollected.isEmpty()) return
 
         val randomCollection = listNotCollected.random()
-        viewModel.updateCollection(
+
+        val updatedItem =
             randomCollection.copy(
                 isCollected = true,
                 dateUpdated = Calendar.getInstance().timeInMillis,
-            ),
-        )
+            )
+        viewModel.updateCollection(updatedItem)
 
+        val index = listCollection.indexOfFirst { it.id == randomCollection.id }
+
+        if (index >= 0) {
+            listCollection[index] = updatedItem
+        }
+
+        binding.textContadorHome.text =
+            "${listCollection.filter { it.isCollected }.size}/${listCollection.size}"
+        binding.animationViewCollectedHome.repeatCount = 20
         binding.animationViewCollectedHome.setRawFromString(randomCollection.rawName)
-        binding.animationViewCollectedHome.repeatCount = 10
+        setupTextInformationHome()
     }
 
     private fun setupListener() {
         with(binding) {
             imageButtonBackHome.setOnClickListener {
-                activity?.finish()
+                showRewardedInterstitial(true)
             }
 
             lifecycleScope.launch {
@@ -159,6 +274,7 @@ class HomeFragment : Fragment() {
             }
 
             buttonNextAnimalHome.setOnClickListener {
+                showRewardedInterstitial()
                 setupRandomCollection()
             }
 
@@ -184,6 +300,13 @@ class HomeFragment : Fragment() {
         adView.setAdSize(adSizeMediumRectangle)
         val adRequest = AdRequest.Builder().build()
         adView.loadAd(adRequest)
+    }
+
+    private fun showKonfetti() {
+        val listPresets =
+            listOf(Presets.parade(), Presets.rain(), Presets.festive(), Presets.explode())
+        val randomPresets = listPresets.random()
+        binding.konfettiView.start(randomPresets)
     }
 
     override fun onResume() {

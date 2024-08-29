@@ -6,5 +6,5 @@ package com.isaquesoft.petcollection.domain.entity
 data class PetCollectionParamsEntity(
     val adBannerId: String = "",
     val adBannerIdMediumRectangle: String = "",
-    val adIntersticialId: String = "",
+    val adRewardedInterstitialId: String = "",
 )

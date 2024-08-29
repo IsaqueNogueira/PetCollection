@@ -17,7 +17,7 @@ class CollectionAdapter(
             with(binding) {
                 if (collection.isCollected) {
                     animationViewItemCollection.setRawFromString(collection.rawName)
-                    animationViewItemCollection.repeatCount = 1
+                    animationViewItemCollection.repeatCount = 20
                 } else {
                     animationViewItemCollection.setRawFromString("paw")
                     animationViewItemCollection.repeatCount = 0

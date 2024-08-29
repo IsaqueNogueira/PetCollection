@@ -11,12 +11,12 @@ import kotlinx.parcelize.Parcelize
 data class PetCollectionParams(
     val adBannerId: String = "",
     val adBannerIdMediumRectangle: String = "",
-    val adIntersticialId: String = "",
+    val adRewardedInterstitialId: String = "",
 ) : Parcelable
 
 fun PetCollectionParamsEntity.toModel() =
     PetCollectionParams(
         adBannerId = adBannerId,
         adBannerIdMediumRectangle = adBannerIdMediumRectangle,
-        adIntersticialId = adIntersticialId,
+        adRewardedInterstitialId = adRewardedInterstitialId,
     )
