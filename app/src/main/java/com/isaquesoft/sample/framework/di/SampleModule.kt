@@ -2,7 +2,7 @@ package com.isaquesoft.sample.framework.di
 
 import com.isaquesoft.petcollection.domain.PetCollectionStarter
 import com.isaquesoft.petcollection.presentation.stater.PetCollectionStarterImpl
-import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.loadKoinModules
 import org.koin.core.context.GlobalContext.unloadKoinModules
 import org.koin.core.module.Module
@@ -14,7 +14,7 @@ import org.koin.dsl.module
 private val sampleModule: Module =
 
     module {
-        factory<PetCollectionStarter> { PetCollectionStarterImpl(application = androidApplication()) }
+        factory<PetCollectionStarter> { PetCollectionStarterImpl(context = androidContext()) }
     }
 
 fun loadAppModule() {
