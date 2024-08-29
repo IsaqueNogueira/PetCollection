@@ -71,28 +71,13 @@ dependencies {
 }
 
 afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId "com.github.IsaqueNogueira"
-                artifactId "petcollection"
-                version "1.0.0-SNAPSHOT"
-                artifact("$buildDir/outputs/aar/petcollection-release.aar")
-            }
+    android.libraryVariants.each {variant->
+        publishing.publications.create(variant.name, MavenPublication){
+            from components.findByName(variant.name)
+            groupId "com.github.IsaqueNogueira"
+            artifactId "petcollection"
+            version = '1.0.0'
         }
-    }
-}
 
-project.afterEvaluate {
-    publishing {
-        publications {
-            bar(MavenPublication) {
-                groupId "com.github.IsaqueNogueira"
-                artifactId "petcollection"
-                version "1.0.0-SNAPSHOT"
-                artifact("$buildDir/outputs/aar/petcollection-release.aar")
-            }
-        }
     }
 }
