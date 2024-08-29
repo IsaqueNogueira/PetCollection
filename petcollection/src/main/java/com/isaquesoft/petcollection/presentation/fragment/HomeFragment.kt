@@ -1,7 +1,6 @@
 package com.isaquesoft.petcollection.presentation.fragment
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,25 +49,6 @@ class HomeFragment : Fragment() {
     }
 
     private lateinit var adView: AdView
-    private var initialLayoutComplete = false
-    private val adSizeMediumRectangle: AdSize
-        get() {
-            val display = requireActivity().windowManager.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display.getMetrics(outMetrics)
-
-            val density = outMetrics.density
-
-            var adWidthPixels = binding.adViewMediumRectangle.width.toFloat()
-            if (adWidthPixels == 0f) {
-                adWidthPixels = outMetrics.widthPixels.toFloat()
-            }
-
-            val adWidth = (adWidthPixels / density).toInt()
-            val adHeight = 230
-            return AdSize(adWidth, adHeight)
-        }
-
     private var rewardedInterstitialAd: RewardedInterstitialAd? = null
 
     override fun onCreateView(
@@ -287,19 +267,16 @@ class HomeFragment : Fragment() {
     private fun setupAdMediumRectangle() {
         adView = AdView(requireContext())
         binding.adViewMediumRectangle.addView(adView)
-        binding.adViewMediumRectangle.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadAdBanner()
-            }
-        }
+        loadAdBanner()
     }
 
     private fun loadAdBanner() {
-        adView.adUnitId = petCollectionParams.adBannerIdMediumRectangle
-        adView.setAdSize(adSizeMediumRectangle)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
+        if (::adView.isInitialized) {
+            adView.adUnitId = petCollectionParams.adBannerIdMediumRectangle
+            adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+        }
     }
 
     private fun showKonfetti() {
@@ -319,8 +296,9 @@ class HomeFragment : Fragment() {
         adView.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.adViewMediumRectangle.removeAllViews()
         adView.destroy()
     }
 }
