@@ -194,6 +194,7 @@ class HomeFragment : Fragment() {
         if (listNotCollected.isEmpty()) {
             binding.textContadorHome.text = "${listCollection.size}/${listCollection.size}"
             binding.animationViewCollectedHome.setRawFromString(listCollection.maxByOrNull { it.dateUpdated }!!.rawName)
+            binding.animationViewCollectedHome.playAnimation()
             return
         }
 
@@ -211,6 +212,7 @@ class HomeFragment : Fragment() {
                     }.maxByOrNull { it.dateUpdated }!!
                     .rawName,
             )
+            binding.animationViewCollectedHome.playAnimation()
         }
     }
 
@@ -236,8 +238,10 @@ class HomeFragment : Fragment() {
 
         binding.textContadorHome.text =
             "${listCollection.filter { it.isCollected }.size}/${listCollection.size}"
-        binding.animationViewCollectedHome.repeatCount = 20
+
         binding.animationViewCollectedHome.setRawFromString(randomCollection.rawName)
+        binding.animationViewCollectedHome.playAnimation()
+        binding.animationViewCollectedHome.repeatCount = 20
         setupTextInformationHome()
     }
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background_home">
 
     <ImageButton
@@ -44,20 +44,22 @@
         android:paddingTop="10dp"
         android:paddingEnd="16dp"
         android:paddingBottom="10dp"
-        tools:text="15/65"
         android:textColor="@color/white"
         android:textStyle="bold"
         app:drawableEndCompat="@drawable/streamline__pet_paw_solid"
         app:drawableTint="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/imageButtonBackHome"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageButtonBackHome" />
+        app:layout_constraintTop_toTopOf="@id/imageButtonBackHome"
+        tools:text="15/65" />
 
     <TextView
         android:id="@+id/textInformationHome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/nosso_aplicativo_gratuito_gra_as_a_voc_ncolete_os_bichinhos_e_monte_a_sua_cole_o"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -98,9 +100,9 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
-            app:lottie_imageAssetsFolder="raw/"
             android:layout_marginEnd="1dp"
             app:lottie_autoPlay="true"
+            app:lottie_imageAssetsFolder="raw/"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/a3" />
 
