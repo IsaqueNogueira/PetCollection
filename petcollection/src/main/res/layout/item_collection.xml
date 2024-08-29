@@ -25,6 +25,7 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="1dp"
+                app:lottie_imageAssetsFolder="raw/"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
