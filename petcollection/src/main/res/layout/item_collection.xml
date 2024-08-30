@@ -8,6 +8,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,13 +26,13 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="1dp"
-                app:lottie_imageAssetsFolder="raw/"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:lottie_autoPlay="true"
+                app:lottie_imageAssetsFolder="raw/"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/a3" />
 

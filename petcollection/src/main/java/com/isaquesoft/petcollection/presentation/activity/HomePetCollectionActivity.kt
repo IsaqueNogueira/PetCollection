@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -19,8 +18,6 @@ import com.isaquesoft.petcollection.presentation.stater.PetCollectionStarterImpl
 class HomePetCollectionActivity : AppCompatActivity() {
     private lateinit var binding: HomePetcollectionActivityBinding
 
-    private var petCollectionParams: PetCollectionParams? = null
-
     private lateinit var adView: AdView
     private var initialLayoutComplete = false
 
@@ -32,7 +29,7 @@ class HomePetCollectionActivity : AppCompatActivity() {
 
             val density = outMetrics.density
 
-            var adWidthPixels = binding.adViewBanner.width.toFloat()
+            var adWidthPixels = binding.adViewBannerPetCollectionActivity.width.toFloat()
             if (adWidthPixels == 0f) {
                 adWidthPixels = outMetrics.widthPixels.toFloat()
             }
@@ -45,33 +42,35 @@ class HomePetCollectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = HomePetcollectionActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupStatusBarColor()
         adView = AdView(this)
         setupGetParams()
     }
 
     private fun setupGetParams() {
-        petCollectionParams = intent.getParcelableExtra(PET_COLLECTION_PARAMS)
-        petCollectionParams?.let {
-            binding.adViewBanner.addView(adView)
-            binding.adViewBanner.viewTreeObserver.addOnGlobalLayoutListener {
-                if (!initialLayoutComplete) {
-                    initialLayoutComplete = true
-                    loadAdBanner(it)
-                }
-            }
+        val petCollectionParams: PetCollectionParams =
+            intent.getParcelableExtra(PET_COLLECTION_PARAMS)
+                ?: throw IllegalArgumentException("Where is Pet colletion params?")
 
-            setupNavigation(it)
+        binding.adViewBannerPetCollectionActivity.addView(adView)
+        binding.adViewBannerPetCollectionActivity.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadAdBanner(petCollectionParams)
+            }
+            setupNavigation(petCollectionParams)
         }
     }
 
     private fun setupNavigation(it: PetCollectionParams) {
-        val navController = Navigation.findNavController(this, R.id.navHostMainActivity)
+        val navController =
+            Navigation.findNavController(this, R.id.navHostHomePetCollectionActivity)
         val bundle =
             Bundle().apply {
-                putParcelable("petCollectionParams", it)
+                putParcelable(PET_COLLECTION_PARAMS, it)
             }
 
-        navController.setGraph(R.navigation.nav_graph, bundle)
+        navController.setGraph(R.navigation.nav_graph_pet_collection, bundle)
     }
 
     private fun loadAdBanner(petCollectionParams: PetCollectionParams) {
@@ -94,5 +93,11 @@ class HomePetCollectionActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         adView.destroy()
+    }
+
+    private fun setupStatusBarColor() {
+        val window = window
+        val statusBarColor = getColor(R.color.color_orange_pet_collection)
+        window.statusBarColor = statusBarColor
     }
 }

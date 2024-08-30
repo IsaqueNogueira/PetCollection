@@ -21,14 +21,13 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoa
 import com.isaquesoft.geradorderecibos.presentation.util.safelyNavigate
 import com.isaquesoft.petcollection.R
 import com.isaquesoft.petcollection.data.model.Collection
-import com.isaquesoft.petcollection.databinding.HomeFragmentBinding
+import com.isaquesoft.petcollection.databinding.HomePetCollectionFragmentBinding
 import com.isaquesoft.petcollection.presentation.state.HomeState
 import com.isaquesoft.petcollection.presentation.util.setRawFromString
 import com.isaquesoft.petcollection.presentation.view.Presets
 import com.isaquesoft.petcollection.presentation.viewmodel.HomeFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
@@ -36,9 +35,9 @@ import java.util.Calendar
 /**
  * Created by Isaque Nogueira on 26/08/2024
  */
-class HomeFragment : Fragment() {
-    private lateinit var binding: HomeFragmentBinding
-    private val args: HomeFragmentArgs by navArgs()
+class HomePetCollectionFragment : Fragment() {
+    private lateinit var binding: HomePetCollectionFragmentBinding
+    private val args: HomePetCollectionFragmentArgs by navArgs()
     private val petCollectionParams by lazy { args.petCollectionParams }
 
     private val viewModel: HomeFragmentViewModel by viewModel()
@@ -56,7 +55,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = HomeFragmentBinding.inflate(inflater, container, false)
+        binding = HomePetCollectionFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -90,10 +89,13 @@ class HomeFragment : Fragment() {
                 object : RewardedInterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: RewardedInterstitialAd) {
                         rewardedInterstitialAd = ad
+                        binding.buttonNextAnimalHome.isEnabled = true
+                        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
                     }
 
                     override fun onAdFailedToLoad(adError: LoadAdError) {
                         rewardedInterstitialAd = null
+                        binding.buttonNextAnimalHome.isEnabled = false
                     }
                 },
             )
@@ -251,19 +253,13 @@ class HomeFragment : Fragment() {
                 showRewardedInterstitial(true)
             }
 
-            lifecycleScope.launch {
-                delay(2500)
-                buttonNextAnimalHome.isEnabled = true
-                buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
-            }
-
             buttonNextAnimalHome.setOnClickListener {
                 showRewardedInterstitial()
                 setupRandomCollection()
             }
 
             binding.textContadorHome.setOnClickListener {
-                findNavController().safelyNavigate(HomeFragmentDirections.actionHomeFragmentToCollectionFragment())
+                findNavController().safelyNavigate(HomePetCollectionFragmentDirections.actionHomeFragmentToCollectionFragment())
             }
         }
     }
