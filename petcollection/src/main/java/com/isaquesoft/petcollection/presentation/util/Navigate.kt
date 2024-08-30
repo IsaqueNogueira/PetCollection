@@ -1,4 +1,4 @@
-package com.isaquesoft.geradorderecibos.presentation.util
+package com.isaquesoft.petcollection.presentation.util
 
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections

@@ -18,11 +18,11 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
-import com.isaquesoft.geradorderecibos.presentation.util.safelyNavigate
 import com.isaquesoft.petcollection.R
 import com.isaquesoft.petcollection.data.model.Collection
 import com.isaquesoft.petcollection.databinding.HomePetCollectionFragmentBinding
 import com.isaquesoft.petcollection.presentation.state.HomeState
+import com.isaquesoft.petcollection.presentation.util.safelyNavigate
 import com.isaquesoft.petcollection.presentation.util.setRawFromString
 import com.isaquesoft.petcollection.presentation.view.Presets
 import com.isaquesoft.petcollection.presentation.viewmodel.HomeFragmentViewModel
