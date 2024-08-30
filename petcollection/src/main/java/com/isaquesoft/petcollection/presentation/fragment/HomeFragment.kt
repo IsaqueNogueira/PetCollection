@@ -28,7 +28,6 @@ import com.isaquesoft.petcollection.presentation.view.Presets
 import com.isaquesoft.petcollection.presentation.viewmodel.HomeFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
@@ -90,10 +89,12 @@ class HomeFragment : Fragment() {
                 object : RewardedInterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: RewardedInterstitialAd) {
                         rewardedInterstitialAd = ad
+                        binding.buttonNextAnimalHome.isEnabled = true
                     }
 
                     override fun onAdFailedToLoad(adError: LoadAdError) {
                         rewardedInterstitialAd = null
+                        binding.buttonNextAnimalHome.isEnabled = false
                     }
                 },
             )
@@ -252,8 +253,6 @@ class HomeFragment : Fragment() {
             }
 
             lifecycleScope.launch {
-                delay(2500)
-                buttonNextAnimalHome.isEnabled = true
                 buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
             }
 
