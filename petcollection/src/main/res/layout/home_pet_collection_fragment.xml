@@ -26,7 +26,8 @@
         android:text="@string/obrigado"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="20dp"
+        android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/imageButtonBackHome"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,108 +54,128 @@
         app:layout_constraintTop_toTopOf="@id/imageButtonBackHome"
         tools:text="15/65" />
 
-    <TextView
-        android:id="@+id/textInformationHome"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/nosso_aplicativo_gratuito_gra_as_a_voc_ncolete_os_bichinhos_e_monte_a_sua_cole_o"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageButtonBackHome" />
-
-
-    <FrameLayout
-        android:id="@+id/adViewMediumRectangle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInformationHome" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayoutPetHome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:elevation="4dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/adViewMediumRectangle">
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animationViewCollectedHome"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="1dp"
-            app:lottie_autoPlay="true"
-            app:lottie_imageAssetsFolder="raw/"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/a3" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="1dp"
-            android:background="@drawable/message_bubble"
-            android:padding="20dp"
-            android:text="@string/voc_incr_vel"
-            android:textColor="#242424" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageViewSombraHome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/background_sombra"
-        app:layout_constraintBottom_toBottomOf="@id/linearLayoutPetHome"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayoutPetHome" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonNextAnimalHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/background_button_disabled"
-        android:drawableStart="@drawable/ooui__reload"
-        android:drawablePadding="10dp"
-        android:drawableTint="@color/white"
-        android:enabled="false"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
-        android:text="@string/pr_ximo_animal"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewSombraHome" />
-
-    <nl.dionsegijn.konfetti.xml.KonfettiView
-        android:id="@+id/konfettiView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:orientation="vertical"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textContadorHome">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="40dp">
+
+            <TextView
+                android:id="@+id/textInformationHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/nosso_aplicativo_gratuito_gra_as_a_voc_ncolete_os_bichinhos_e_monte_a_sua_cole_o"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <FrameLayout
+                android:id="@+id/adViewMediumRectangle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInformationHome" />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayoutPetHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:elevation="4dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/adViewMediumRectangle">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationViewCollectedHome"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="1dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_imageAssetsFolder="raw/"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/a3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="1dp"
+                    android:background="@drawable/message_bubble"
+                    android:padding="20dp"
+                    android:text="@string/voc_incr_vel"
+                    android:textColor="#242424" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageViewSombraHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/background_sombra"
+                app:layout_constraintBottom_toBottomOf="@id/linearLayoutPetHome"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linearLayoutPetHome" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonNextAnimalHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/background_button_disabled"
+                android:drawableStart="@drawable/ooui__reload"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/white"
+                android:enabled="false"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:text="@string/pr_ximo_animal"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageViewSombraHome" />
+
+            <nl.dionsegijn.konfetti.xml.KonfettiView
+                android:id="@+id/konfettiView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

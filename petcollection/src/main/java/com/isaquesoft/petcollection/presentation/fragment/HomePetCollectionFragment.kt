@@ -49,6 +49,7 @@ class HomePetCollectionFragment : Fragment() {
 
     private lateinit var adView: AdView
     private var rewardedInterstitialAd: RewardedInterstitialAd? = null
+    private var winReward = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +81,41 @@ class HomePetCollectionFragment : Fragment() {
         }
     }
 
+    private fun showAdReward() {
+        rewardedInterstitialAd?.let { reward ->
+            activity?.let {
+                reward.show(it) {
+                    winReward = true
+                    setupRandomCollection()
+                    loadRewardedInterstitial()
+                }
+            }
+        }
+    }
+
+    private fun setupListener() {
+        with(binding) {
+            imageButtonBackHome.setOnClickListener {
+                if (rewardedInterstitialAd == null) {
+                    activity?.finish()
+                    return@setOnClickListener
+                }
+                finishActivityShowingAds()
+            }
+
+            buttonNextAnimalHome.setOnClickListener {
+                showAdReward()
+            }
+
+            binding.textContadorHome.setOnClickListener {
+                findNavController().safelyNavigate(HomePetCollectionFragmentDirections.actionHomeFragmentToCollectionFragment())
+            }
+        }
+    }
+
     private fun loadRewardedInterstitial() {
+        rewardedInterstitialAd = null
+        disableNextAnimalButton()
         context?.let {
             RewardedInterstitialAd.load(
                 it,
@@ -89,72 +124,38 @@ class HomePetCollectionFragment : Fragment() {
                 object : RewardedInterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: RewardedInterstitialAd) {
                         rewardedInterstitialAd = ad
-                        binding.buttonNextAnimalHome.isEnabled = true
-                        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
+                        ad.fullScreenContentCallback =
+                            object : FullScreenContentCallback() {
+                                override fun onAdDismissedFullScreenContent() {
+                                    super.onAdDismissedFullScreenContent()
+                                    if (winReward) {
+                                        showKonfetti()
+                                        winReward = false
+                                    }
+                                    loadRewardedInterstitial()
+                                }
+                            }
+                        enableNextAnimalButton()
                     }
 
-                    override fun onAdFailedToLoad(adError: LoadAdError) {
-                        rewardedInterstitialAd = null
-                        binding.buttonNextAnimalHome.isEnabled = false
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        // Ele não pode mais ver anuncios avisar pra voltar depois
+                        disableNextAnimalButton()
                     }
                 },
             )
         }
     }
 
-    private fun showRewardedInterstitial(shouldFinish: Boolean = false) {
-        rewardedInterstitialAd?.show(requireActivity()) {
-            loadRewardedInterstitial()
-        }
-
-        callBackRewardInterstitialAd(shouldFinish)
+    private fun enableNextAnimalButton() {
+        binding.buttonNextAnimalHome.isEnabled = true
+        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
     }
 
-    private fun callBackRewardInterstitialAd(shouldFinish: Boolean = false) {
-        if (shouldFinish && rewardedInterstitialAd == null) {
-            activity?.finish()
-            return
-        } else if (rewardedInterstitialAd == null) {
-            showKonfetti()
-        }
-
-        rewardedInterstitialAd?.fullScreenContentCallback =
-            object : FullScreenContentCallback() {
-                override fun onAdClicked() {
-                    // Called when a click is recorded for an ad.
-                }
-
-                override fun onAdDismissedFullScreenContent() {
-                    // Called when ad is dismissed.
-                    // Set the ad reference to null so you don't show the ad a second time.
-
-                    rewardedInterstitialAd = null
-                    if (shouldFinish) {
-                        activity?.finish()
-                    } else {
-                        showKonfetti()
-                    }
-                }
-
-                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    // Called when ad fails to show.
-
-                    rewardedInterstitialAd = null
-                    if (shouldFinish) {
-                        activity?.finish()
-                    } else {
-                        showKonfetti()
-                    }
-                }
-
-                override fun onAdImpression() {
-                    // Called when an impression is recorded for an ad.
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    // Called when ad is shown.
-                }
-            }
+    private fun disableNextAnimalButton() {
+        binding.buttonNextAnimalHome.isEnabled = false
+        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_button_disabled)
     }
 
     private fun setupObserver() {
@@ -201,8 +202,8 @@ class HomePetCollectionFragment : Fragment() {
         }
 
         if (firsAccess) {
-            firsAccess = false
             showKonfetti()
+            firsAccess = false
             setupRandomCollection()
         } else {
             binding.textContadorHome.text =
@@ -219,12 +220,11 @@ class HomePetCollectionFragment : Fragment() {
     }
 
     private fun setupRandomCollection() {
-        val listNotCollected = listCollection.filter { !it.isCollected }
+        val listNotCollected = listCollection.filterNot { it.isCollected }
 
         if (listNotCollected.isEmpty()) return
 
         val randomCollection = listNotCollected.random()
-
         val updatedItem =
             randomCollection.copy(
                 isCollected = true,
@@ -241,25 +241,37 @@ class HomePetCollectionFragment : Fragment() {
         binding.textContadorHome.text =
             "${listCollection.filter { it.isCollected }.size}/${listCollection.size}"
 
-        binding.animationViewCollectedHome.setRawFromString(randomCollection.rawName)
-        binding.animationViewCollectedHome.playAnimation()
-        binding.animationViewCollectedHome.repeatCount = 20
+        with(binding.animationViewCollectedHome) {
+            setRawFromString(randomCollection.rawName)
+            playAnimation()
+            repeatCount = 20
+        }
+
         setupTextInformationHome()
     }
 
-    private fun setupListener() {
-        with(binding) {
-            imageButtonBackHome.setOnClickListener {
-                showRewardedInterstitial(true)
-            }
+    private fun finishActivityShowingAds() {
+        rewardedInterstitialAd?.let {
+            it.fullScreenContentCallback =
+                object :
+                    FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        activity?.finish()
+                    }
 
-            buttonNextAnimalHome.setOnClickListener {
-                showRewardedInterstitial()
-                setupRandomCollection()
-            }
+                    override fun onAdImpression() {
+                        super.onAdImpression()
+                        activity?.finish()
+                    }
 
-            binding.textContadorHome.setOnClickListener {
-                findNavController().safelyNavigate(HomePetCollectionFragmentDirections.actionHomeFragmentToCollectionFragment())
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
+                        activity?.finish()
+                    }
+                }
+            activity?.let { act ->
+                it.show(act) {}
             }
         }
     }
@@ -272,10 +284,11 @@ class HomePetCollectionFragment : Fragment() {
 
     private fun loadAdBanner() {
         if (::adView.isInitialized) {
-            adView.adUnitId = petCollectionParams.adBannerIdMediumRectangle
-            adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
+            with(adView) {
+                adUnitId = petCollectionParams.adBannerIdMediumRectangle
+                setAdSize(AdSize.MEDIUM_RECTANGLE)
+                loadAd(AdRequest.Builder().build())
+            }
         }
     }
 
@@ -287,18 +300,18 @@ class HomePetCollectionFragment : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
         adView.resume()
+        super.onResume()
     }
 
     override fun onPause() {
-        super.onPause()
         adView.pause()
+        super.onPause()
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding.adViewMediumRectangle.removeAllViews()
         adView.destroy()
+        super.onDestroyView()
     }
 }
