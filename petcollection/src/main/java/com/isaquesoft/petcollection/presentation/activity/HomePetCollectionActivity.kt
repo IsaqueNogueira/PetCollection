@@ -30,7 +30,7 @@ class HomePetCollectionActivity : AppCompatActivity() {
 
             val density = outMetrics.density
 
-            var adWidthPixels = binding.adViewBanner.width.toFloat()
+            var adWidthPixels = binding.adViewBannerPetCollectionActivity.width.toFloat()
             if (adWidthPixels == 0f) {
                 adWidthPixels = outMetrics.widthPixels.toFloat()
             }
@@ -44,6 +44,7 @@ class HomePetCollectionActivity : AppCompatActivity() {
         binding = HomePetcollectionActivityBinding.inflate(layoutInflater)
         window.statusBarColor = Color.parseColor("#E45F50")
         setContentView(binding.root)
+        setupStatusBarColor()
         adView = AdView(this)
         setupGetParams()
     }
@@ -53,24 +54,22 @@ class HomePetCollectionActivity : AppCompatActivity() {
             intent.getParcelableExtra(PET_COLLECTION_PARAMS)
                 ?: throw IllegalArgumentException("Where is Pet colletion params?")
 
-        petCollectionParams.let {
-            binding.adViewBanner.addView(adView)
-            binding.adViewBanner.viewTreeObserver.addOnGlobalLayoutListener {
-                if (!initialLayoutComplete) {
-                    initialLayoutComplete = true
-                    loadAdBanner(it)
-                }
+        binding.adViewBannerPetCollectionActivity.addView(adView)
+        binding.adViewBannerPetCollectionActivity.viewTreeObserver.addOnGlobalLayoutListener {
+            if (!initialLayoutComplete) {
+                initialLayoutComplete = true
+                loadAdBanner(petCollectionParams)
             }
-
-            setupNavigation(it)
+            setupNavigation(petCollectionParams)
         }
     }
 
     private fun setupNavigation(it: PetCollectionParams) {
-        val navController = Navigation.findNavController(this, R.id.navHostMainActivityPetCollection)
+        val navController =
+            Navigation.findNavController(this, R.id.navHostHomePetCollectionActivity)
         val bundle =
             Bundle().apply {
-                putParcelable("petCollectionParams", it)
+                putParcelable(PET_COLLECTION_PARAMS, it)
             }
 
         navController.setGraph(R.navigation.nav_graph_pet_collection, bundle)
@@ -96,5 +95,11 @@ class HomePetCollectionActivity : AppCompatActivity() {
     override fun onDestroy() {
         adView.destroy()
         super.onDestroy()
+    }
+
+    private fun setupStatusBarColor() {
+        val window = window
+        val statusBarColor = getColor(R.color.color_orange_pet_collection)
+        window.statusBarColor = statusBarColor
     }
 }

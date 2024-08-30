@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.isaquesoft.petcollection.presentation.fragment.HomeFragment"
+        android:name="com.isaquesoft.petcollection.presentation.fragment.HomePetCollectionFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/home_fragment" >
+        tools:layout="@layout/home_pet_collection_fragment" >
         <argument
             android:name="petCollectionParams"
             app:argType="com.isaquesoft.petcollection.presentation.model.PetCollectionParams" />
