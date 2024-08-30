@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Pet Collection</string>
+    <string name="obrigado">Gracias</string>
+    <string name="nosso_aplicativo_gratuito_gra_as_a_voc_ncolete_os_bichinhos_e_monte_a_sua_cole_o">¡Nuestra aplicación es gratuita gracias a ti!\nRecoge las mascotas y construye tu colección.</string>
+    <string name="voltar">Volver</string>
+    <string name="voc_incr_vel">¡Eres increíble!</string>
+    <string name="pr_ximo_animal">Próximo animal</string>
+    <string name="sua_cole_o">Tu colección</string>
+    <string name="total">Total:</string>
+    <string name="nosso_aplicativo_gratuito_gra_as_a_voc_nsua_colecao_esta_completa">¡Nuestra aplicación es gratuita gracias a ti!\n¡Felicidades, tu colección está completa!</string>
+</resources>
