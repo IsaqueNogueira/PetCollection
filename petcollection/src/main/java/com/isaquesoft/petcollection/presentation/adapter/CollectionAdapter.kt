@@ -19,7 +19,7 @@ class CollectionAdapter(
                     animationViewItemCollection.setRawFromString(collection.rawName)
                     animationViewItemCollection.repeatCount = 20
                 } else {
-                    animationViewItemCollection.setRawFromString("paw")
+                    animationViewItemCollection.setRawFromString("paw_default_pet_collection")
                     animationViewItemCollection.repeatCount = 0
                 }
             }
