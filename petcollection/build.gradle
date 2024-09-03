@@ -40,33 +40,32 @@ android {
 dependencies {
     def room_version = "2.6.1"
 
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.material
+    api libs.androidx.core.ktx
+    api libs.androidx.appcompat
+    api libs.material
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
 
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
+    api "androidx.room:room-runtime:$room_version"
+    api "androidx.room:room-ktx:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    implementation "io.insert-koin:koin-android:3.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.8.4"
+    api "io.insert-koin:koin-android:3.3.1"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.8.4"
 
-    implementation "com.airbnb.android:lottie:6.0.1"
-
+    api "com.airbnb.android:lottie:6.0.1"
 
     implementation 'com.google.android.gms:play-services-ads:23.2.0'
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.7"
-    implementation "androidx.navigation:navigation-ui-ktx:2.7.7"
+    api "androidx.navigation:navigation-fragment-ktx:2.7.7"
+    api "androidx.navigation:navigation-ui-ktx:2.7.7"
 
-    implementation 'com.google.code.gson:gson:2.10'
+    api 'com.google.code.gson:gson:2.10'
 
     //konfetti
-    implementation 'nl.dionsegijn:konfetti-xml:2.0.4'
+    api 'nl.dionsegijn:konfetti-xml:2.0.4'
 
 }
 
@@ -76,7 +75,7 @@ afterEvaluate {
             from components.findByName(variant.name)
             groupId "com.github.IsaqueNogueira"
             artifactId "petcollection"
-            version = '2.0.1'
+            version = '2.0.2'
         }
 
     }
