@@ -150,12 +150,12 @@ class HomePetCollectionFragment : Fragment() {
 
     private fun enableNextAnimalButton() {
         binding.buttonNextAnimalHome.isEnabled = true
-        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador)
+        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_circle_contador_pet_collection)
     }
 
     private fun disableNextAnimalButton() {
         binding.buttonNextAnimalHome.isEnabled = false
-        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_button_disabled)
+        binding.buttonNextAnimalHome.setBackgroundResource(R.drawable.background_button_disabled_pet_collection)
     }
 
     private fun setupObserver() {
@@ -206,6 +206,11 @@ class HomePetCollectionFragment : Fragment() {
             firsAccess = false
             setupRandomCollection()
         } else {
+            if (listCollection.filter { it.isCollected }.isEmpty()) {
+                setupRandomCollection()
+                return
+            }
+
             binding.textContadorHome.text =
                 "${listCollection.filter { it.isCollected }.size}/${listCollection.size}"
             binding.animationViewCollectedHome.setRawFromString(
