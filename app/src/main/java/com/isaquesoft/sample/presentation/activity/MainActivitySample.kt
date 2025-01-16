@@ -18,7 +18,6 @@ class MainActivitySample : AppCompatActivity() {
         MobileAds.initialize(this) {}
         val petCollectionParams =
             PetCollectionParamsEntity(
-                adBannerId = "ca-app-pub-6470587668575312/1303668027",
                 adBannerIdMediumRectangle = "ca-app-pub-6470587668575312/1303668027",
                 adRewardedInterstitialId = "ca-app-pub-6470587668575312/2812190815",
             )
