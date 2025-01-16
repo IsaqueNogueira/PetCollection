@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -65,11 +67,21 @@ class HomePetCollectionFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
+
+        val backPressedCallback =
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                if (rewardedInterstitialAd == null) {
+                    activity?.finish()
+                    return@addCallback
+                }
+                finishActivityShowingAds()
+            }
+
         viewModel.getListCollection()
         setupObserver()
         setupAdMediumRectangle()
         setupAdPremiado()
-        setupListener()
+        setupListener(backPressedCallback)
     }
 
     private fun setupAdPremiado() {
@@ -93,14 +105,10 @@ class HomePetCollectionFragment : Fragment() {
         }
     }
 
-    private fun setupListener() {
+    private fun setupListener(backPressedCallback: OnBackPressedCallback) {
         with(binding) {
             imageButtonBackHome.setOnClickListener {
-                if (rewardedInterstitialAd == null) {
-                    activity?.finish()
-                    return@setOnClickListener
-                }
-                finishActivityShowingAds()
+                backPressedCallback.handleOnBackPressed()
             }
 
             buttonNextAnimalHome.setOnClickListener {

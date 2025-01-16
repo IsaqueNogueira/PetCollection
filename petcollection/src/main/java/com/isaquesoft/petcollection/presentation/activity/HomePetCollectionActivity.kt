@@ -1,12 +1,8 @@
 package com.isaquesoft.petcollection.presentation.activity
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
 import com.isaquesoft.petcollection.R
 import com.isaquesoft.petcollection.databinding.HomePetcollectionActivityBinding
 import com.isaquesoft.petcollection.presentation.model.PetCollectionParams
@@ -18,32 +14,11 @@ import com.isaquesoft.petcollection.presentation.stater.PetCollectionStarterImpl
 class HomePetCollectionActivity : AppCompatActivity() {
     private lateinit var binding: HomePetcollectionActivityBinding
 
-    private lateinit var adView: AdView
-    private var initialLayoutComplete = false
-
-    private val adSize: AdSize
-        get() {
-            val display = windowManager.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display.getMetrics(outMetrics)
-
-            val density = outMetrics.density
-
-            var adWidthPixels = binding.adViewBannerPetCollectionActivity.width.toFloat()
-            if (adWidthPixels == 0f) {
-                adWidthPixels = outMetrics.widthPixels.toFloat()
-            }
-
-            val adWidth = (adWidthPixels / density).toInt()
-            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = HomePetcollectionActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupStatusBarColor()
-        adView = AdView(this)
         setupGetParams()
     }
 
@@ -52,14 +27,7 @@ class HomePetCollectionActivity : AppCompatActivity() {
             intent.getParcelableExtra(PET_COLLECTION_PARAMS)
                 ?: throw IllegalArgumentException("Where is Pet colletion params?")
 
-        binding.adViewBannerPetCollectionActivity.addView(adView)
-        binding.adViewBannerPetCollectionActivity.viewTreeObserver.addOnGlobalLayoutListener {
-            if (!initialLayoutComplete) {
-                initialLayoutComplete = true
-                loadAdBanner(petCollectionParams)
-            }
-            setupNavigation(petCollectionParams)
-        }
+        setupNavigation(petCollectionParams)
     }
 
     private fun setupNavigation(it: PetCollectionParams) {
@@ -71,28 +39,6 @@ class HomePetCollectionActivity : AppCompatActivity() {
             }
 
         navController.setGraph(R.navigation.nav_graph_pet_collection, bundle)
-    }
-
-    private fun loadAdBanner(petCollectionParams: PetCollectionParams) {
-        adView.adUnitId = petCollectionParams.adBannerId
-        adView.setAdSize(adSize)
-        val adRequest = AdRequest.Builder().build()
-        adView.loadAd(adRequest)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adView.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        adView.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        adView.destroy()
     }
 
     private fun setupStatusBarColor() {
