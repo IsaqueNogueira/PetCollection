@@ -75,7 +75,7 @@ afterEvaluate {
             from components.findByName(variant.name)
             groupId "com.github.IsaqueNogueira"
             artifactId "petcollection"
-            version = '2.0.6'
+            version = '2.0.7'
         }
     }
 }
